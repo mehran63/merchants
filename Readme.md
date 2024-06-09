@@ -46,7 +46,7 @@ npm run start
   - The GraphQL api consumer logic for both SSR and CSR
 - /styles/
   - CSS styles
-- .next/
+- /.next/
   - build outpur directory
 
 ## Running Unit Tests
