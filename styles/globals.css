@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-rgb: 255, 255, 255;
+  --color-purple-300:  206, 147, 216; /* Manually synced with tailwind.config.ts */
+  --color-purple-500:  128, 0, 128; /* Manually synced with tailwind.config.ts */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .merchant-tile {
+    @apply flex flex-col items-start relative border border-gray-300 rounded-lg text-left;
+  }
+  .merchant-tile::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(var(--color-purple-300), 0.5); /* Using CSS variable */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: inherit; /* To match the parent's border-radius */
+  }
+  .merchant-tile:hover::after {
+    opacity: 1;
+  }
+  .merchant-logo {
+    @apply w-16 h-16 2xl:h-20 2xl:w-20 absolute top-2 left-4 2xl:top-4 2xl:left-4 rounded-full;
+  }
+  .merchant-name-logo {
+    @apply invert grayscale bg-black;
+  }
+}
