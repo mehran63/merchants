@@ -5,6 +5,8 @@ import data from './data.json';
 import { buildSchema, graphql } from 'graphql';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+export const runtime = 'edge';
+
 const schema = buildSchema(`
   type MerchantCategory {
     name: String
@@ -61,17 +63,44 @@ const root = {
 };
 
 // Define the API handler
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest) {
   if (req.method === 'POST') {
-    // Execute the GraphQL query
-    graphql({ schema, source: req.body.query, rootValue: root })
-      .then(result => {
-        res.status(200).json(result);
-      })
-      .catch(error => {
-        res.status(500).json({ error: error.message });
+    try {
+      // Edge runtime: Read and parse the request body manually
+      const chunks = [];
+      for await (const chunk of req.body) {
+        chunks.push(chunk);
+      }
+      const body = Buffer.concat(chunks).toString();
+      const { query } = JSON.parse(body);
+      const result = await graphql({
+        schema,
+        source: query,
+        rootValue: root,
       });
+      return new Response(JSON.stringify(result, null, 2), {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8',
+        },
+      });
+    } catch (error: any) {
+      console.error('Failed to execute GraphQL query', error);
+      return new Response(JSON.stringify({ error: error.message }, null, 2), {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        status: 500,
+      });
+    }
   } else {
-    res.status(405).json({ error: 'Method Not Allowed' });
+    return new Response(
+      JSON.stringify({ error: 'Method Not Allowed' }, null, 2),
+      {
+        headers: {
+          'content-type': 'application/json;charset=UTF-8',
+        },
+        status: 405,
+      }
+    );
   }
 }

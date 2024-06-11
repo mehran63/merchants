@@ -39,8 +39,8 @@ export async function fetchShopFeed(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query }),
   });
-  const body = await res.text();
   try {
+    const body = await res.text();
     const { data, error } = JSON.parse(body);
     if (!data || !data.shopFeed) {
       console.error('Failed to fetch API', error);
@@ -48,9 +48,7 @@ export async function fetchShopFeed(
     }
     return data.shopFeed;
   } catch (e) {
-    console.error('Non-json error', res.status, body);
-    throw new Error(
-      `Failed to parse ${baseURL} API rsponse ${res.status}: ${body}`
-    );
+    console.error('Non-json error', res.status);
+    throw new Error(`Failed to parse ${baseURL} API rsponse ${res.status}`);
   }
 }

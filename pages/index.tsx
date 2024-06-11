@@ -5,6 +5,8 @@ import { MerchantCategory } from '@/types/merchant';
 import { GetServerSideProps, NextPage } from 'next';
 import React, { useState } from 'react';
 
+export const runtime = 'experimental-edge';
+
 interface PageProps {
   merchantTiles: MerchantCategory[];
 }
