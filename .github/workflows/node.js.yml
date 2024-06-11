@@ -42,7 +42,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: 9e6ad7949d81e912ee6124e46b31386e
-          projectName: Merchants
+          projectName: merchants
           directory: .next
           # Optional: Switch what branch you are publishing to.
           # By default this will be the branch which triggered this workflow
