@@ -5,6 +5,8 @@ import data from './data.json';
 import { buildSchema, graphql } from 'graphql';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+export const runtime = 'edge';
+
 const schema = buildSchema(`
   type MerchantCategory {
     name: String
